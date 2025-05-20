@@ -1,0 +1,76 @@
+;:- STC MsgStruct Version 3.1
+
+;:- MsgStructure Header
+;:- MsgStructure "MSH"
+;:- UserComment "MSH segment- HL7 v.2.3.1
+;          "
+;:- Version "DataGate Version 3.1"
+;:- FormatOption DELIMITED
+;:- RepSeparator "Repetition Field Seperator       " "~"
+;:- Escape "Escape Delimiter Character       " "\\"
+;:- DefaultDelimiters "HL7"
+;:- End MsgStructure Header
+
+;:- Delimiter Structure
+(define MSH-delm '(
+ ("\r" endofrec)
+ ("|")
+ ("~" separator array)
+ ("^")
+ ("&")
+ ))
+
+;:- Global Template Reference
+(load "HL7/HL7_2.3.1/hl7_2.3.1_hd.ssc")
+(load "HL7/HL7_2.3.1/hl7_2.3.1_pt.ssc")
+(load "HL7/HL7_2.3.1/hl7_2.3.1_ce.ssc")
+(load "HL7/HL7_2.3.1/hl7_2.3.1_vi.ssc")
+;:- End Global Template Reference
+
+;:- Local Template Definition
+;:- End Local Template Definition
+
+;:- MsgStructure Definition
+(define MSH-struct (message-convert (quote
+  (MSH ON 1 1 "\^MSH\.\*" und und -1
+    (segment_ID ON 1 1 "MSH" "MSH" und -1)	;:= {0.0:N}
+    (MSH-2-encoding_characters ON 1 1 und "^~\&" und -1)	;:= {0.1:N}
+    (MSH-3-sending_application ON 0 1 und und und -1
+      (HD GTS 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_hd.ssc" HD-struct und und)	;:= {0.2.0:Y}
+    )	;:= {0.2:N}
+    (MSH-4-sending_facility ON 0 1 und und und -1
+      (HD GTS 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_hd.ssc" HD-struct und und)	;:= {0.3.0:Y}
+    )	;:= {0.3:N}
+    (MSH-5-receiving_application ON 0 1 und und und -1
+      (HD GTS 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_hd.ssc" HD-struct und und)	;:= {0.4.0:Y}
+    )	;:= {0.4:N}
+    (MSH-6-receiving_facility ON 0 1 und und und -1
+      (HD GTS 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_hd.ssc" HD-struct und und)	;:= {0.5.0:Y}
+    )	;:= {0.5:N}
+    (MSH-7-message_date/time ON 0 1 und und und -1)	;:= {0.6:N}
+    (MSH-8-security ON 0 1 und und und -1)	;:= {0.7:N}
+    (MSH-9-message_type ON 0 1 und und und -1
+      (MSH-9-1_message_type ON 0 1 und und und -1)	;:= {0.8.0:N}
+      (MSH-9-2_trigger_event ON 0 1 und und und -1)	;:= {0.8.1:N}
+      (MSH-9-3_message_structure ON 0 1 und und und -1)	;:= {0.8.2:N}
+    )	;:= {0.8:N}
+    (MSH-10-message_control_ID ON 0 1 und und und -1)	;:= {0.9:N}
+    (MSH-11-processing_ID ON 0 1 und und und -1
+      (PT GTS 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_pt.ssc" PT-struct und und)	;:= {0.10.0:Y}
+    )	;:= {0.10:N}
+    (MSH-12-version_ID ON 0 1 und und und -1
+      (VID GTS 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_vi.ssc" VID-struct und und)	;:= {0.11.0:Y}
+    )	;:= {0.11:N}
+    (MSH-13-sequence_number ON 0 1 und und und -1)	;:= {0.12:N}
+    (MSH-14-continuation_pointer ON 0 1 und und und -1)	;:= {0.13:N}
+    (MSH-15-accept_ack_type ON 0 1 und und und -1)	;:= {0.14:N}
+    (MSH-16-application_ack_type ON 0 1 und und und -1)	;:= {0.15:N}
+    (MSH-17-country_code ON 0 1 und und und -1)	;:= {0.16:N}
+    (MSH-18_character_set ONA 0 INF und und und -1)	;:= {0.17:N}
+    (MSH-19_principal_language ON 0 1 und und und -1
+      (CE GTS 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_ce.ssc" CE-struct und und)	;:= {0.18.0:Y}
+    )	;:= {0.18:N}
+    (MSH-20_alt_character_set_handling ON 0 1 und und und -1)	;:= {0.19:N}
+  )	;:= {0:N}
+)))
+;:- End MsgStructure Definition

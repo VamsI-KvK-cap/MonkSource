@@ -1,0 +1,97 @@
+;; source-event-path: hl7_ACK_2.3.1.ssc
+;; destination-event-path: hl7_ACK_2.3.1.ssc
+(define usercomment "")
+(define version "3.1")
+(define xlate-name "AI-PoC-Simple-Filter")
+(define input-message-format-file-name "hl7_ACK_2.3.1.ssc")
+(define output-message-format-file-name "hl7_ACK_2.3.1.ssc")
+(load "hl7_ACK_2.3.1.ssc")
+(load "hl7_ACK_2.3.1.ssc")
+(define src-collapsed-nodes '(
+))
+(define dest-collapsed-nodes '(
+))
+(define collapsed-rules '(
+))
+(define AI-PoC-Simple-Filter
+  (let ((input ($make-event-map ACK-delm ACK-struct))
+        (output ($make-event-map ACK-delm ACK-struct))
+       )
+    (lambda (message-string)
+      (try
+        ($event-parse input message-string)
+        ($event-clear output)
+		
+        (begin
+         (comment "Filter out the ACKs containing ZZZ")
+         (let ((skip #f))
+          (if (> (count-rep ~input%ACK.MSA) 0)
+           (begin
+		   (newline)
+		   (display "Found more than zero MSA segments")		   
+		   (newline)
+		   (display "MSA-3-text_message=")
+		   (display (get ~input%ACK.MSA.MSA-3-text_message))
+		   (newline)
+            (if (string-contains? (get ~input%ACK.MSA.MSA-3-text_message) "ZZZ") 
+             (begin
+				(newline)
+				(display "Found ZZZ. Setting skip to true")
+				(newline)	    
+              (set! skip #t)
+             )
+             (begin
+			 
+				(newline)
+				(display "Did not find ZZZ. Setting skip to false")
+				(newline)	   
+              (set! skip #f)
+             )
+            )
+           )
+           (begin		   
+				(newline)
+				(display "Default option when no MSA segment is present. Setting skip to false")
+				(newline)	   
+            (set! skip #f)
+           )
+          )		  
+		   (newline)
+		   (display "skip = " )		   
+		   (display skip)
+		   (newline)
+          (if skip
+           (begin
+            (copy-strip "" ~output%ACK "")
+           )
+           (begin
+            (copy-strip ~input%ACK.MSH ~output%ACK.MSH "")            
+			(copy-strip ~input%ACK.MSA ~output%ACK.MSA "")  
+           )
+          )
+         )
+        )
+        (let ((result   ($event->string output)))
+          ($event-clear input)
+          ($event-clear output)
+          result)
+    ;; STC_CATCH_BEGIN
+    (catch
+      ((Exception-Mapping)
+        "" ; treat mapping errors as messages not to be passed on
+      )
+      (otherwise
+        ""
+      )
+    )
+    
+    
+    
+    
+    
+    
+    
+
+    ;; STC_CATCH_END
+      )
+)))

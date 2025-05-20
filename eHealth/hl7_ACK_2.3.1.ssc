@@ -1,0 +1,39 @@
+;:- STC MsgStruct Version 3.1
+
+;:- MsgStructure Header
+;:- MsgStructure "ACK"
+;:- UserComment " "
+;:- Version "DataGate Version 3.1"
+;:- FormatOption DELIMITED
+;:- RepSeparator "Repetition Field Delimiter" "~"
+;:- Escape "Escape Character Delimiter" "\\"
+;:- DefaultDelimiters "HL7"
+;:- End MsgStructure Header
+
+;:- Delimiter Structure
+(define ACK-delm '(
+ ("\r" endofrec)
+ ("|")
+ ("~" separator array)
+ ("^")
+ ("&")
+ ))
+
+;:- Global Template Reference
+(load "HL7/HL7_2.3.1/hl7_2.3.1_msh.ssc")
+(load "HL7/HL7_2.3.1/hl7_2.3.1_msa.ssc")
+(load "HL7/HL7_2.3.1/hl7_2.3.1_err.ssc")
+;:- End Global Template Reference
+
+;:- Local Template Definition
+;:- End Local Template Definition
+
+;:- MsgStructure Definition
+(define ACK-struct (message-convert (quote
+  (ACK ON 1 1 und und und und
+    (MSH GTN 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_msh.ssc" MSH-struct und und)	;:= {0.0:Y}
+    (MSA GTN 1 1 "HL7/HL7_2.3.1/hl7_2.3.1_msa.ssc" MSA-struct und und)	;:= {0.1:Y}
+    (ERR GTN 0 1 "HL7/HL7_2.3.1/hl7_2.3.1_err.ssc" ERR-struct und und)	;:= {0.2:Y}
+  )	;:= {0:N}
+)))
+;:- End MsgStructure Definition

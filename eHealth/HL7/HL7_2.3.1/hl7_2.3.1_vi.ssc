@@ -1,0 +1,36 @@
+;:- STC MsgStruct Version 3.1
+
+;:- MsgStructure Header
+;:- MsgStructure "VID"
+;:- UserComment " MO data type- HL7 2.3  "
+;:- Version "DataGate Version 3.1"
+;:- FormatOption DELIMITED
+;:- RepSeparator "Repetition Field Seperator  " "~"
+;:- Escape "Escape Delimiter Character  " "\\"
+;:- DefaultDelimiters "HL7"
+;:- End MsgStructure Header
+
+;:- Delimiter Structure
+(define VID-delm '(
+ ("\r" endofrec)
+ ("|")
+ ("~" separator array)
+ ("^")
+ ("&")
+ ))
+
+;:- Global Template Reference
+;:- End Global Template Reference
+
+;:- Local Template Definition
+;:- End Local Template Definition
+
+;:- MsgStructure Definition
+(define VID-struct (message-convert (quote
+  (VID OS 1 1 und und und -1
+    (version_ID ON 0 1 und und und -1)	;:= {0.0:N}
+    (internationalization_code ON 0 1 und und und -1)	;:= {0.1:N}
+    (international_version_ID ON 0 1 und und und -1)	;:= {0.2:N}
+  )	;:= {0:N}
+)))
+;:- End MsgStructure Definition

@@ -1,0 +1,39 @@
+;:- STC MsgStruct Version 3.1
+
+;:- MsgStructure Header
+;:- MsgStructure "CE"
+;:- UserComment "CE data type- HL7 v.2.3.1"
+;:- Version "DataGate Version 3.1"
+;:- FormatOption DELIMITED
+;:- RepSeparator "Repetition Field Seperator" "~"
+;:- Escape "Escape Delimiter Character" "\\"
+;:- DefaultDelimiters "HL7"
+;:- End MsgStructure Header
+
+;:- Delimiter Structure
+(define CE-delm '(
+ ("\r" endofrec)
+ ("|")
+ ("~" separator array)
+ ("^")
+ ("&")
+ ))
+
+;:- Global Template Reference
+;:- End Global Template Reference
+
+;:- Local Template Definition
+;:- End Local Template Definition
+
+;:- MsgStructure Definition
+(define CE-struct (message-convert (quote
+  (CE OS 1 1 und und und und
+    (ID_code ON 0 1 und und und und)	;:= {0.0:N}
+    (text ON 0 1 und und und und)	;:= {0.1:N}
+    (coding_scheme ON 0 1 und und und und)	;:= {0.2:N}
+    (alternate_ID ON 0 1 und und und und)	;:= {0.3:N}
+    (alternate_text ON 0 1 und und und und)	;:= {0.4:N}
+    (alternate_coding_scheme ON 0 1 und und und und)	;:= {0.5:N}
+  )	;:= {0:N}
+)))
+;:- End MsgStructure Definition
